@@ -93,7 +93,7 @@ class Mklaren:
 
         # Addressed by the kernel number
         data = dict()
-        for pi in xrange(no_kernels):
+        for pi in range(no_kernels):
             data[pi] = dict()
             data[pi]["K"]    = Ks[pi]               # Kernel matrices /functions
             data[pi]["G"]    = zeros((n, cols))     # Cholesky factors
@@ -101,15 +101,15 @@ class Mklaren:
                 else diag(Ks[pi]).copy()            # Diagonal not touched
                                                     # by lambda
             data[pi]["act"]  = list()               # active (pivot) set
-            data[pi]["ina"]  = range(n)             # inactive set
+            data[pi]["ina"]  = list(range(n))             # inactive set
             data[pi]["k"]    = 0                    # column count
 
 
         # Perform lookahead Cholesky steps for each kernel
         if self.debug:
-            print "=== Start of the lookahead steps ==="
+            print("=== Start of the lookahead steps ===")
 
-        for pi in xrange(no_kernels):
+        for pi in range(no_kernels):
             # Pass by reference
             G = data[pi]["G"]
             K = data[pi]["K"]
@@ -120,11 +120,11 @@ class Mklaren:
                                                  ina=ina, no_steps=self.delta,)
 
         # Reset active and inactive sets
-        for pi in xrange(no_kernels):
+        for pi in range(no_kernels):
             K = data[pi]["K"]
             data[pi]["lookahead"] = data[pi]["act"][:]      # look-ahead set cp
             data[pi]["act"]       = []                      # active set
-            data[pi]["ina"]       = range(n)                # inactive set
+            data[pi]["ina"]       = list(range(n))                # inactive set
             data[pi]["k"]         = 0                       # column count
             data[pi]["D"]   = K.diag() if isinstance(K, Kinterface) \
                 else diag(K).copy()
@@ -132,7 +132,7 @@ class Mklaren:
 
         # Start main loop
         if self.debug:
-            print "=== Start of main loop ==="
+            print("=== Start of main loop ===")
 
         # Global input space and list of kernels corresponding to each column
         # Note the columns have been augmented and the corresponding transform
@@ -145,7 +145,7 @@ class Mklaren:
         gnorm_inner = zeros((rank, ))
 
         # Iterate until reaching maximum rank if the regression input space
-        for xk in xrange(rank):
+        for xk in range(rank):
 
             # Select best (kernel, pivot) based on correlation with the
             # residual
@@ -160,7 +160,7 @@ class Mklaren:
                                                        lbd=lbd,
                                                        xk=xk)
             if self.debug:
-                print "Best kernel, pivot: %d, %d" % (best_pi, best_i)
+                print("Best kernel, pivot: %d, %d" % (best_pi, best_i))
 
             # Load data for selected kernel
             # Make sure this is passed as a reference (updated in the process)
@@ -279,11 +279,11 @@ class Mklaren:
         self.regr       = regr[:n]
         self.bias       = bias
         self.y_pred     = bias + self.regr
-        for pi in xrange(no_kernels):
+        for pi in range(no_kernels):
             data[pi]["G"] = data[pi]["G"][:, :data[pi]["k"]]
             assert data[pi]["k"] == len(data[pi]["act"])
 
-        for pi in data.keys():
+        for pi in list(data.keys()):
             cols = where(Xa_mask == pi)[0]
             if len(cols):
                 data[pi]["beta"]  = self.beta[cols]
@@ -338,7 +338,7 @@ class Mklaren:
             no_steps    = len(order)
             have_order  = True
 
-        for ki, k in enumerate(xrange(start, start + no_steps)):
+        for ki, k in enumerate(range(start, start + no_steps)):
 
             # Select best pivot
             i = order[ki] if have_order else ina[argmax(D[ina])]
@@ -397,7 +397,7 @@ class Mklaren:
         best_val     = 0 if step == 0 else float("inf")
         best_pivot   = 0
 
-        for pi in data.keys():
+        for pi in list(data.keys()):
             ina     = data[pi]["ina"]
             act     = data[pi]["act"]
             G       = data[pi]["G"]
@@ -411,7 +411,7 @@ class Mklaren:
 
             # Exclude zeros correlations
             if self.debug:
-                print "Kernel:%d, step:%d, max:%f" % (pi, k, max(c_vec))
+                print("Kernel:%d, step:%d, max:%f" % (pi, k, max(c_vec)))
             if max(absolute(c_vec)) > tol:
                 gamma, pivot = self.gradient(X=Xa, bisec=bisec,
                                              A=A, residual=residual,
@@ -577,7 +577,7 @@ class Mklaren:
         GM   = GTG - G1.dot(G1.T)/n
         lc   = lbd * (1.0 - 1.0 / (n + self.rank))
         A1   = ssqrt(lc + array([G[i, :].dot(GM).dot(G[i, :].T)
-                            for i in xrange(n)])).ravel()
+                            for i in range(n)])).ravel()
 
         # Correlation with the residual
         v       = residual
@@ -608,7 +608,7 @@ class Mklaren:
             k    = self.rank
             P    = eye(n, n)     - 1.0 * ones((n, n))/n
             Pk   = eye(n+k, n+k) - 1.0 * ones((n+k, n+k))/(n+k)
-            for i in xrange(G.shape[0]):
+            for i in range(G.shape[0]):
                 lv = zeros((k, 1))
                 lv[step] = l
                 gi = Pk.dot(lf * vstack([P.dot(Ladv[:, i:i+1]),
@@ -630,7 +630,7 @@ class Mklaren:
                 Mapping kernel_index -> (kernel, kernel (XS), kernel(SS)^1 )
                 where S is th active set.
         """
-        for pi in self.data.keys():
+        for pi in list(self.data.keys()):
             K    = self.data[pi]["K"]
             G    = self.data[pi]["G"]
             inxs = self.data[pi]["act"]

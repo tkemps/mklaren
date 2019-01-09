@@ -215,7 +215,7 @@ class RFF_KMP:
 
         # Compute costs and select best features
         costs = zeros((len(self.samplers), p))
-        for ri in xrange(self.rank):
+        for ri in range(self.rank):
 
             for si, rf in enumerate(Rff):
                 norms = norm(rf, axis=0).reshape((1, p))
@@ -261,7 +261,7 @@ class RFF_KMP:
                 Rff[si] = samp.transform(X)
 
         # Return matching columns
-        for ri in xrange(self.rank):
+        for ri in range(self.rank):
             si, col = self.active_set[ri, :]
             Gt[:, ri] = Rff[si][:, col]
         return Gt

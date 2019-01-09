@@ -36,7 +36,7 @@ class TestSPGP(unittest.TestCase):
                          kernel_args={"gamma": gm}) for gm in gamma_range]
         Km = Kinterface(data=X, kernel=kernel_sum,
                         kernel_args={"kernels": [exponential_kernel] * len(gamma_range),
-                                     "kernels_args": map(lambda gm: {"gamma": gm}, gamma_range)})
+                                     "kernels_args": [{"gamma": gm} for gm in gamma_range]})
 
         for seed in range(5):
             # Sample a function from a GP

@@ -91,7 +91,7 @@ class RidgeMKL:
 
         # Expand kernel interfaces to kernel matrices
         expand = lambda K: K[:, :] if isinstance(K, Kinterface) else K
-        Hs     = map(expand, Ks)
+        Hs     = list(map(expand, Ks))
 
         # Assert correct dimensions
         assert Ks[0].shape[0] == len(y)
@@ -104,8 +104,7 @@ class RidgeMKL:
         self.mu = self.mkl_model.mu
 
         if self.low_rank:
-            self.X = hstack(map(lambda e: sqrt(e[0]) * e[1],
-                                zip(self.mkl_model.mu, Hs)))
+            self.X = hstack([sqrt(e[0]) * e[1] for e in zip(self.mkl_model.mu, Hs)])
 
             if self.method in self.centered:
                 self.X = center_kernel_low_rank(self.X)
@@ -269,7 +268,7 @@ class RidgeLowRank:
         # Kernel weight is the corresponding portion of the beta vector
         subranks = [self.Gs[ki].shape[1] for ki in range(len(self.mu))]
         subranks = [0] + list(cumsum(subranks))
-        se = zip(subranks[:-1], subranks[1:])
+        se = list(zip(subranks[:-1], subranks[1:]))
         for ki in range(len(self.mu)):
             self.mu[ki] = norm(self.Gs[ki].dot(self.beta[se[ki][0]:se[ki][1]]))
 

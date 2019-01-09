@@ -37,26 +37,26 @@ def correct_xy(x, y):
 
 
 def linear_kernel(x, y, b=0):
-        """
-        The linear kernel (the usual dot product in n-dimensional space).
+    """
+    The linear kernel (the usual dot product in n-dimensional space).
 
-        .. math::
-            k(\mathbf{x}, \mathbf{y}) = b + \mathbf{x}^T \mathbf{y}
+    .. math::
+        k(\mathbf{x}, \mathbf{y}) = b + \mathbf{x}^T \mathbf{y}
 
-        :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param b: (``float``) Bias term.
+    :param b: (``float``) Bias term.
 
-        :return: (``numpy.ndarray``) Kernel value/matrix between data points.
-        """
-        if isinstance(x, int):
-            return x * y
-        if sp.isspmatrix(x):
-            return b + np.array(x.dot(y.T).todense())
-        else:
-            return b + x.dot(y.T)
+    :return: (``numpy.ndarray``) Kernel value/matrix between data points.
+    """
+    if isinstance(x, int):
+        return x * y
+    if sp.isspmatrix(x):
+        return b + np.array(x.dot(y.T).todense())
+    else:
+        return b + x.dot(y.T)
 
 
 def linear_kernel_noise(x, y, b=1, noise=1):
@@ -87,54 +87,54 @@ def linear_kernel_noise(x, y, b=1, noise=1):
 
 
 def poly_kernel(x, y, degree=2, b=0):
-        """
-        The polynomial kernel.
+    """
+    The polynomial kernel.
 
-        .. math::
-            k(\mathbf{x}, \mathbf{y}) = (b + \mathbf{x}^T \mathbf{y})^p
+    .. math::
+        k(\mathbf{x}, \mathbf{y}) = (b + \mathbf{x}^T \mathbf{y})^p
 
-        :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param degree: (``float``) Polynomial degree.
+    :param degree: (``float``) Polynomial degree.
 
-        :param b: (``float``) Bias term.
+    :param b: (``float``) Bias term.
 
-        :return: (``numpy.ndarray``) Kernel value/matrix between data points.
-        """
-        if sp.isspmatrix(x):
-            return np.array(x.dot(y.T).todense()) ** degree
-        if not hasattr(x, "shape"):
-            return (b + x * y) ** degree
-        else:
-            return (b + x.dot(y.T)) ** degree
+    :return: (``numpy.ndarray``) Kernel value/matrix between data points.
+    """
+    if sp.isspmatrix(x):
+        return np.array(x.dot(y.T).todense()) ** degree
+    if not hasattr(x, "shape"):
+        return (b + x * y) ** degree
+    else:
+        return (b + x.dot(y.T)) ** degree
 
 
 def sigmoid_kernel(x, y, c=1, b=0):
-        """
-        The sigmoid kernel.
+    """
+    The sigmoid kernel.
 
-        .. math::
-            k(\mathbf{x}, \mathbf{y}) = tan(c \mathbf{x}^T \mathbf{y} + b)
+    .. math::
+        k(\mathbf{x}, \mathbf{y}) = tan(c \mathbf{x}^T \mathbf{y} + b)
 
-        :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param c: (``float``) Scale.
+    :param c: (``float``) Scale.
 
-        :param b: (``float``) Bias.
+    :param b: (``float``) Bias.
 
-        :return: (``numpy.ndarray``) Kernel value/matrix between data points.
-        """
-        if sp.isspmatrix(x) and sp.isspmatrix(y):
-            x = np.array(x.todense())
-            y = np.array(y.todense())
-        if not hasattr(x, "shape"):
-            return np.tanh(c * x * y + b)
-        else:
-            return np.tanh(c * x.dot(y.T) + b)
+    :return: (``numpy.ndarray``) Kernel value/matrix between data points.
+    """
+    if sp.isspmatrix(x) and sp.isspmatrix(y):
+        x = np.array(x.todense())
+        y = np.array(y.todense())
+    if not hasattr(x, "shape"):
+        return np.tanh(c * x * y + b)
+    else:
+        return np.tanh(c * x.dot(y.T) + b)
 
 
 def exponential_kernel(x, y, sigma=2.0, gamma=None):
@@ -144,22 +144,21 @@ def exponential_kernel(x, y, sigma=2.0, gamma=None):
         .. math::
             k(\mathbf{x}, \mathbf{y}) = exp\{\dfrac{\|\mathbf{x} - \mathbf{y}\|^2}{\sigma^2} \}
 
-        or
+    or
 
         .. math::
             k(\mathbf{x}, \mathbf{y}) = exp\{\gamma \|\mathbf{x} - \mathbf{y}\|^2 \}
 
-        :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param sigma: (``float``) Length scale.
+    :param sigma: (``float``) Length scale.
 
-        :param gamma: (``float``) Scale.
+    :param gamma: (``float``) Scale.
 
-        :return: (``numpy.ndarray``) Kernel value/matrix between data points.
+    :return: (``numpy.ndarray``) Kernel value/matrix between data points.
     """
-
     if gamma is None:
         gamma = 1.0 / (2.0 * sigma ** 2)
 
@@ -167,12 +166,12 @@ def exponential_kernel(x, y, sigma=2.0, gamma=None):
         x = np.array(x.todense())
         y = np.array(y.todense())
     if not hasattr(x, "shape"):
-        return np.exp(-gamma  * np.linalg.norm(x - y, ord=2)**2)
+        return np.exp(-gamma * np.linalg.norm(x - y, ord=2) ** 2)
     if np.asarray(x).ndim == 0:
-        return np.exp(-gamma  * (x - y)**2)
+        return np.exp(-gamma * (x - y) ** 2)
     if len(x.shape) >= 2 or len(y.shape) >= 2:
-        return np.exp(-gamma * cdist(x, y, metric="euclidean")**2)
-    return np.exp(-gamma * np.linalg.norm(x - y, ord=2)**2)
+        return np.exp(-gamma * cdist(x, y, metric="euclidean") ** 2)
+    return np.exp(-gamma * np.linalg.norm(x - y, ord=2) ** 2)
 
 
 def exponential_cosine_kernel(x, y, gamma=1, omega=1):
@@ -185,15 +184,15 @@ def exponential_cosine_kernel(x, y, gamma=1, omega=1):
             k(\mathbf{x}, \mathbf{y}) = \dfrac{1}{2} exp\{\dfrac{d^2}{\sigma^2}\} + \dfrac{1}{2} cos(\omega d^2)
 
 
-        :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param omega: (``float``) Frequency of the oscillation.
+    :param omega: (``float``) Frequency of the oscillation.
 
-        :param gamma: (``float``) Scale.
+    :param gamma: (``float``) Scale.
 
-        :return: (``numpy.ndarray``) Kernel value/matrix between data points.
+    :return: (``numpy.ndarray``) Kernel value/matrix between data points.
     """
     if sp.isspmatrix(x) and sp.isspmatrix(y):
         x = np.array(x.todense())
@@ -206,7 +205,7 @@ def exponential_cosine_kernel(x, y, gamma=1, omega=1):
         D = cdist(x, y, metric="euclidean")
     else:
         D = np.linalg.norm(x - y, ord=2)
-    return 0.5 * np.exp(-gamma * D**2) + 0.5 * np.cos(omega * D**2)
+    return 0.5 * np.exp(-gamma * D ** 2) + 0.5 * np.cos(omega * D ** 2)
 
 
 def exponential_absolute(x, y, sigma=2.0, gamma=None):
@@ -221,15 +220,15 @@ def exponential_absolute(x, y, sigma=2.0, gamma=None):
         .. math::
             k(\mathbf{x}, \mathbf{y}) = exp\{\gamma \|\mathbf{x} - \mathbf{y}\|^2 \}
 
-        :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param sigma: (``float``) Length scale.
+    :param sigma: (``float``) Length scale.
 
-        :param gamma: (``float``) Scale.
+    :param gamma: (``float``) Scale.
 
-        :return: (``numpy.ndarray``) Kernel value/matrix between data points.
+    :return: (``numpy.ndarray``) Kernel value/matrix between data points.
     """
     if gamma is None:
         gamma = 1.0 / (2.0 * sigma ** 2)
@@ -237,7 +236,7 @@ def exponential_absolute(x, y, sigma=2.0, gamma=None):
         x = np.array(x.todense())
         y = np.array(y.todense())
     if not hasattr(x, "shape"):
-        return np.exp(-gamma  * np.linalg.norm(x - y, ord=1))
+        return np.exp(-gamma * np.linalg.norm(x - y, ord=1))
     if np.asarray(x).ndim == 0:
         return np.exp(-gamma * np.absolute(x - y))
     if len(x.shape) >= 2 or len(y.shape) >= 2:
@@ -257,28 +256,28 @@ def periodic_kernel(x, y, sigma=1, per=1, l=1):
             k(\mathbf{x}, \mathbf{y}) = \sigma^2 exp\{-2 \pi sin(\dfrac{\|\mathbf{x} - \mathbf{y}\|}{per})/l \}
 
 
-        :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param per: (``float``) Period.
+    :param per: (``float``) Period.
 
-        :param l: (``float``) Length scale.
+    :param l: (``float``) Length scale.
 
-        :param sigma: (``float``) Variance.
+    :param sigma: (``float``) Variance.
 
-        :return: (``numpy.ndarray``) Kernel value/matrix between data points.
+    :return: (``numpy.ndarray``) Kernel value/matrix between data points.
     """
     if sp.isspmatrix(x) and sp.isspmatrix(y):
         x = np.array(x.todense())
         y = np.array(y.todense())
     if not hasattr(x, "shape"):
-        return sigma**2 * np.exp(- 2 * np.sin(np.pi * np.absolute(x - y) / per) ** 2 / l ** 2)
+        return sigma ** 2 * np.exp(- 2 * np.sin(np.pi * np.absolute(x - y) / per) ** 2 / l ** 2)
     if np.asarray(x).ndim == 0:
-        return sigma**2 * np.exp(- 2 * np.sin(np.pi * np.absolute(x - y) / per) ** 2 / l ** 2)
+        return sigma ** 2 * np.exp(- 2 * np.sin(np.pi * np.absolute(x - y) / per) ** 2 / l ** 2)
     if len(x.shape) >= 2 or len(y.shape) >= 2:
         return sigma ** 2 * np.exp(- 2 * np.sin(np.pi * cdist(x, y, metric="euclidean") / per) ** 2 / l ** 2)
-    return sigma**2 * np.exp(- 2 * np.sin(np.pi * np.absolute(x - y) / per) ** 2 / l ** 2)
+    return sigma ** 2 * np.exp(- 2 * np.sin(np.pi * np.absolute(x - y) / per) ** 2 / l ** 2)
 
 
 def matern_kernel(x, y, l=1.0, nu=1.5):
@@ -288,18 +287,19 @@ def matern_kernel(x, y, l=1.0, nu=1.5):
         .. math::
             k(\mathbf{x}, \mathbf{y}) = \sigma^2 \dfrac{2^{1-\nu}}{\Gamma{\nu}} (\sqrt{2\nu} \dfrac{d}{l})^{\nu} K_{\nu} (\sqrt{2\nu} \dfrac{d}{l})
 
-        where {\Gamma } \Gamma is the gamma function, {K_{\nu }} K_{\nu }
-        is the modified Bessel function of the second kind, and l and \nu are non-negative parameters of the covariance.
+    where {\Gamma } \Gamma is the gamma function, {K_{\nu }} K_{\nu }
+    is the modified Bessel function of the second kind, and l and \nu
+    are non-negative parameters of the covariance.
 
-        :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param x: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
+    :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
 
-        :param l: (``float``) Length scale.
+    :param l: (``float``) Length scale.
 
-        :param nu: (``float``) Differentiability of the kernel.
+    :param nu: (``float``) Differentiability of the kernel.
 
-        :return: (``numpy.ndarray``) Kernel value/matrix between data points.
+    :return: (``numpy.ndarray``) Kernel value/matrix between data points.
     """
 
     mk = Matern(length_scale=l, nu=nu)
@@ -373,7 +373,7 @@ def center_kernel(K):
     m = int(K.shape[0])
     o = np.ones((m, 1))
     I = np.eye(m, m)
-    Ic = (I-o.dot(o.T)/m)
+    Ic = (I - o.dot(o.T) / m)
     return Ic.dot(K).dot(Ic)
 
 
@@ -418,7 +418,7 @@ def kernel_to_distance(K):
     assert K.shape[0] == K.shape[1]
     n = K.shape[0]
     d = K.diag() if hasattr(K, "diag") else np.diag(K)
-    D = np.sqrt(-2 * K [:, :] + d.reshape((n, 1)) + d.reshape((1, n)))
+    D = np.sqrt(-2 * K[:, :] + d.reshape((n, 1)) + d.reshape((1, n)))
     return D
 
 
@@ -429,7 +429,7 @@ def kernel_sum(x, y, kernels, kernels_args, kernels_weights=None):
     :param y: (``numpy.ndarray``) Data point(s) of shape ``(n_samples, n_features)`` or ``(n_features, )``.
     :param kernels: (``Iterable``) Iterable of pointers to kernels.
     :param kernels_args: (``Iterable``) Iterable with dictionaries, of the same length as `kernels`.
-        Arguments are passed to kernels as kwargs.
+           Arguments are passed to kernels as kwargs.
     :param kernels_weights: (``Iterable``) Iterable with kernel weights, of the same length as `kernels`.
     :return:
     """

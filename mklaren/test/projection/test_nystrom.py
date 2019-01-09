@@ -42,7 +42,7 @@ class TestNystrom(unittest.TestCase):
         errors_lev = np.zeros((repeats, len(rank_range),))
         errors_rand = np.zeros((repeats, len(rank_range),))
 
-        for j in xrange(repeats):
+        for j in range(repeats):
             self.X = np.random.rand(self.n, self.p)
             for i, rank in enumerate(rank_range):
                 model_lev = Nystrom(rank=rank, random_state=j, lbd=1)
@@ -59,7 +59,7 @@ class TestNystrom(unittest.TestCase):
 
         lev_win = np.sum(errors_lev < errors_rand)
         rand_win = np.sum(errors_lev > errors_rand)
-        print("Leverage win: %d, random win: %d" % (lev_win, rand_win))
+        print(("Leverage win: %d, random win: %d" % (lev_win, rand_win)))
         self.assertTrue(lev_win > rand_win)
 
 

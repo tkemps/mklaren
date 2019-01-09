@@ -10,7 +10,7 @@ def generate_sequence(priors, L):
         Length of a sequence.
     :return:
     """
-    keys = priors.keys()
+    keys = list(priors.keys())
     csum = np.cumsum([priors[ky] for ky in keys])
     seq = ""
     for l in range(L):

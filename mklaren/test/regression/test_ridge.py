@@ -23,7 +23,7 @@ class TestRidge(unittest.TestCase):
                                   kernel=exponential_kernel,
                                   kernel_args={"gamma": g}) for g in self.gamma_range]
 
-            inxs = np.random.choice(tr.ravel(), size=self.n/3)
+            inxs = np.random.choice(tr.ravel(), size=int(self.n/3))
             alpha = np.zeros((self.n, 1))
             alpha[inxs] = np.random.randn(len(inxs), 1)
             mu0 = np.random.randn(len(Ks), 1)
@@ -32,7 +32,7 @@ class TestRidge(unittest.TestCase):
             y = y - y.mean()    # y necessarily 1D array
             y += np.random.randn(len(K0), 1).ravel() * 0.001
 
-            for method in RidgeMKL.mkls.keys():
+            for method in list(RidgeMKL.mkls.keys()):
 
                 model = RidgeMKL(method=method)
                 model.fit(Ks, y, holdout=te)
@@ -56,7 +56,7 @@ class TestRidgeLowRank(unittest.TestCase):
             Vs = [X[:, i].reshape(self.n, 1) for i in range(self.m)]
             y = X[:, :3].sum(axis=1)
             y = y - y.mean()
-            for method in RidgeMKL.mkls_low_rank.keys():
+            for method in list(RidgeMKL.mkls_low_rank.keys()):
                 model = RidgeMKL(method=method, low_rank=True, lbd=0.01)
                 model.fit(Vs, y, holdout=te)
                 yp = model.predict(te)

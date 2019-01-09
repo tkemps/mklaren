@@ -21,21 +21,21 @@ class TestKinterface(unittest.TestCase):
     def testGetItem(self):
         Kp = poly_kernel(self.X, self.X, degree=2)
         Ki = Kinterface(data=self.X, kernel=poly_kernel, kernel_args={"degree": 2})
-        self.assertAlmostEquals(np.linalg.norm(Ki[:, :] - Kp), 0, delta=3)
+        self.assertAlmostEqual(np.linalg.norm(Ki[:, :] - Kp), 0, delta=3)
 
     def testCall(self):
         Kp = poly_kernel(self.X, self.X, degree=2)
         Ki = Kinterface(data=self.X, kernel=poly_kernel, kernel_args={"degree": 2})
-        self.assertAlmostEquals(np.linalg.norm(Ki(self.X, self.X) - Kp), 0, delta=3)
+        self.assertAlmostEqual(np.linalg.norm(Ki(self.X, self.X) - Kp), 0, delta=3)
 
     def testRowNorm(self):
         Kp = poly_kernel(self.X, self.X, degree=2)
         Kr = kernel_row_normalize(Kp)
         Ki = Kinterface(data=self.X, kernel=poly_kernel, kernel_args={"degree": 2},
                         row_normalize=True)
-        self.assertAlmostEquals(np.linalg.norm(Ki.diag().ravel() - np.ones((self.n, ))), 0, delta=3)
-        self.assertAlmostEquals(np.linalg.norm(Ki(self.X, self.X) - Kr), 0, delta=3)
-        self.assertAlmostEquals(np.linalg.norm(Ki[:, :] - Kr), 0, delta=3)
+        self.assertAlmostEqual(np.linalg.norm(Ki.diag().ravel() - np.ones((self.n, ))), 0, delta=3)
+        self.assertAlmostEqual(np.linalg.norm(Ki(self.X, self.X) - Kr), 0, delta=3)
+        self.assertAlmostEqual(np.linalg.norm(Ki[:, :] - Kr), 0, delta=3)
 
 
     def testCallOther(self):
@@ -43,7 +43,7 @@ class TestKinterface(unittest.TestCase):
         Ki = Kinterface(data=self.X, kernel=poly_kernel, kernel_args={"degree": 2},
                         row_normalize=False)
         Kr = Ki(self.X, self.Y)
-        self.assertAlmostEquals(np.linalg.norm(Kp - Kr), 0, delta=3)
+        self.assertAlmostEqual(np.linalg.norm(Kp - Kr), 0, delta=3)
 
 
     def testCallOtherNorm(self):

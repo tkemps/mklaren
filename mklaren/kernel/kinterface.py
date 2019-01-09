@@ -1,3 +1,4 @@
+import numpy
 from numpy import array, atleast_2d, ndarray, diag, sqrt, outer
 from scipy.sparse import isspmatrix
 
@@ -45,7 +46,7 @@ class Kinterface:
             assert len(item) == 2
             args = [None, None]
             for oi, obj in enumerate(item):
-                if isinstance(obj, int):
+                if isinstance(obj, int) or isinstance(obj, numpy.integer):
                     assert obj >= 0
                     args[oi] = self.data[obj]
                     if isinstance(args[oi], ndarray):
@@ -56,7 +57,7 @@ class Kinterface:
                     assert start >= 0
                     assert stop >= 0
                     args[oi] = self.data[start:stop]
-                elif isinstance(obj, xrange) or isinstance(obj, list) or \
+                elif isinstance(obj, range) or isinstance(obj, list) or \
                     isinstance(obj, ndarray):
                     if isinstance(obj, ndarray) and len(obj.shape) > 1:
                         # Assume items represent data not indices
@@ -64,13 +65,13 @@ class Kinterface:
                     elif isinstance(self.data, list):
                         args[oi] = [self.data[int(o)] for o in obj]
                     else:
-                        args[oi] = self.data[map(int, obj)]
+                        args[oi] = self.data[list(map(int, obj))]
 
                 elif isspmatrix(obj):
                     args[oi] = obj
 
                 else:
-                    raise NotImplementedError("Unknown addressing type.")
+                    raise NotImplementedError("Unknown addressing type: "+str(type.mro(type(obj))))
 
             # Ravel if vector
             # r = self.kernel(args[0], args[1], **self.kernel_args)
@@ -105,7 +106,7 @@ class Kinterface:
 
             :return (``numpy.ndarray``) diagonal values of the kernel matrix.
             """
-            return array([self[i, i] for i in xrange(self.shape[0])]).ravel()
+            return array([self[i, i] for i in range(self.shape[0])]).ravel()
 
         def diagonal(self):
             """ Diagonal of the kernel matrix (alias). """

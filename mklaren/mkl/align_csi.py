@@ -83,7 +83,7 @@ class AlignCSI:
 
         Mi = inv(M)
         mu = Mi.dot(a) / norm(Mi.dot(a), ord=2)
-        self.Gs = map(center_kernel_low_rank, Gs)
+        self.Gs = list(map(center_kernel_low_rank, Gs))
         self.G  = hstack(Gs)
         self.mu = mu
         self.trained = True

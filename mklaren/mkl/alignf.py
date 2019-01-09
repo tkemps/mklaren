@@ -75,7 +75,7 @@ class Alignf:
             if not isinstance(holdout, type(None)):
                 holdin = sorted(list(set(range(m)) - set(holdout)))
                 y = y[holdin]
-                Ksa = map(lambda k: k[holdin, :][:, holdin], Ks)
+                Ksa = [k[holdin, :][:, holdin] for k in Ks]
                 en = enumerate(Ksa)
                 Ky = y.dot(y.T)
             else:
@@ -86,7 +86,7 @@ class Alignf:
             if not isinstance(holdout, type(None)):
                 holdin = sorted(list(set(range(m)) - set(holdout)))
                 y      = y[holdin]
-                Ksa    = map(lambda k: k[holdin, :], Ks)
+                Ksa    = [k[holdin, :] for k in Ks]
                 en     = enumerate(Ksa)
             else:
                 Ksa    = Ks
@@ -137,7 +137,7 @@ class Alignf:
             Kappa = sum([mu_i * center_kernel(k_i) for mu_i, k_i in zip(mu, Ks)])
             self.Kappa = Kappa
         else:
-            self.Gs = map(lambda g: center_kernel_low_rank(g), Ks)
+            self.Gs = [center_kernel_low_rank(g) for g in Ks]
 
         mu = mu.ravel()
         self.mu = mu

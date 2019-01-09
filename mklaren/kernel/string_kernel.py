@@ -33,8 +33,8 @@ def spectrum_kernel(x1, x2, K=4, beacon=None, bin=None):
     if isinstance(beacon, str):
             beacon = tuple(beacon)
     K = len(beacon) if beacon else K
-    kmers_i = zip(*[x1[k:] for k in range(K)])
-    kmers_j = zip(*[x2[k:] for k in range(K)])
+    kmers_i = list(zip(*[x1[k:] for k in range(K)]))
+    kmers_j = list(zip(*[x2[k:] for k in range(K)]))
     if bin:
         assert len(x1) == len(x2)
         b, b_all = bin
@@ -67,8 +67,8 @@ def spectrum_mismatch(x1, x2, K=4, m=1, bin=None):
     no_mismatches = lambda ki, kj: sum([not k1 == k2 for k1, k2 in zip(ki, kj)])
 
     # Return number of matches
-    kmers_i = zip(*[x1[k:] for k in range(K)])
-    kmers_j = zip(*[x2[k:] for k in range(K)])
+    kmers_i = list(zip(*[x1[k:] for k in range(K)]))
+    kmers_j = list(zip(*[x2[k:] for k in range(K)]))
     if bin:
         assert len(x1) == len(x2)
         b, b_all = bin
@@ -104,8 +104,8 @@ def weighted_degree_kernel(x1, x2, K=4, bin=None, beta=None, minK=2):
         b, b_all = bin
 
     for Kt in range(minK, K + 1):
-        kmers_i = zip(*[x1[k:] for k in range(Kt)])
-        kmers_j = zip(*[x2[k:] for k in range(Kt)])
+        kmers_i = list(zip(*[x1[k:] for k in range(Kt)]))
+        kmers_j = list(zip(*[x2[k:] for k in range(Kt)]))
         if bin:
             start = int(float(b)/b_all * len(kmers_i))
             end = int(float(b+1)/b_all * len(kmers_j))
@@ -149,8 +149,8 @@ def weighted_degree_kernel_pos_inv(x1, x2, K=4, var=8, beacon=None, bin=None):
                 beacon = tuple(beacon)
     for Kt in range(2, K + 1):
         g = 0
-        kmers_i = zip(*[x1[k:] for k in range(Kt)])
-        kmers_j = zip(*[x2[k:] for k in range(Kt)])
+        kmers_i = list(zip(*[x1[k:] for k in range(Kt)]))
+        kmers_j = list(zip(*[x2[k:] for k in range(Kt)]))
         if bin:
             start = int(float(b)/b_all * len(kmers_i))
             end = int(float(b+1)/b_all * len(kmers_j))
@@ -202,8 +202,8 @@ def exponential_spectrum(x1, x2, K=4, l=1):
     krow2 = list(enumerate(zip(*[x2[i:] for i in range(K)])))
 
     # K-mer sets
-    kset1 = set(map(lambda t: t[1], krow1))
-    kset2 = set(map(lambda t: t[1], krow2))
+    kset1 = set([t[1] for t in krow1])
+    kset2 = set([t[1] for t in krow2])
     kint = kset1 & kset2
 
     kdata1 = dict()
@@ -226,7 +226,7 @@ def exponential_spectrum(x1, x2, K=4, l=1):
 
     # Compute correlation between probability distributions
     k = 0
-    for ky in kdata1.iterkeys():
+    for ky in kdata1.keys():
         vec1 = kdata1[ky]
         vec2 = kdata2[ky]
         k += vec1.dot(vec2)

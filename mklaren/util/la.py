@@ -40,8 +40,8 @@ def fro_prod_low_rank(A, B):
     """
 
     fp = 0
-    for i in xrange(A.shape[1]):
-        for j in xrange(B.shape[1]):
+    for i in range(A.shape[1]):
+        for j in range(B.shape[1]):
             gi = A[:, i]
             gj = B[:, j]
             fp += gi.dot(gj)**2
@@ -97,7 +97,7 @@ def cosine_similarity_low_rank_multi(G, y):
     """
     enum = npsum(G.T.dot(y)**2)
     denom = y.T.dot(y) * sqrt(npsum([npsum(G[:, i] * G[:, j])**2
-                                         for i, j in product(xrange(G.shape[1]), xrange(G.shape[1]))]))
+                                         for i, j in product(range(G.shape[1]), range(G.shape[1]))]))
     return 1.0 * enum / denom
 
 
@@ -255,7 +255,7 @@ def qr(A):
     R = zeros((n, n))
     Q[:, 0] = safe_divide(A[:, 0], norm(A[:, 0]))
     R[0, 0] = norm(A[:, 0])
-    for k in xrange(1, n):
+    for k in range(1, n):
         R[:k, k]  = Q[:, :k].T.dot(A[:, k])
         R[k, k]   = norm(A[:, k] - Q[:, :k].dot(R[:k, k]))
         Q[:, k]   = safe_divide(1.0, R[k, k]) * (A[:, k] -  Q[:, :k].dot(R[:k, k]))

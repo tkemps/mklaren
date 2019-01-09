@@ -1,0 +1,15 @@
+name: mklaren
+dependencies:
+  - python=3.6
+  - numpy
+  - pandas
+  - scipy
+  - cvxopt
+  - scikit-learn
+  - matplotlib
+  - GPy
+  - oct2py
+  - align
+  - nltk
+  - gensim
+

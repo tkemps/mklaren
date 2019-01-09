@@ -67,13 +67,13 @@ class Nystrom:
         dg = K.diag() if isinstance(K, Kinterface) else diag(K)
         pi = dg / dg.sum()
         n = K.shape[0]
-        linxs = choice(xrange(n), size=self.rank, replace=True, p=pi)
+        linxs = choice(range(n), size=self.rank, replace=True, p=pi)
         C = K[:, linxs]
         W = C[linxs, :]
         B = C.dot(real(sqrtm(W)))
         BTB = B.T.dot(B)
         BTBi = inv(BTB + n * self.lbd * eye(self.rank, self.rank))
-        l = array([B[i, :].dot(BTBi).dot(B[i, :]) for i in xrange(n)])
+        l = array([B[i, :].dot(BTBi).dot(B[i, :]) for i in range(n)])
         return l / l.sum()
 
 
@@ -89,13 +89,13 @@ class Nystrom:
         if inxs is None:
             if self.lbd == 0:
                 if self.verbose: print("Choosing the active points randomly")
-                inxs = choice(xrange(self.n),
+                inxs = choice(range(self.n),
                               size=self.rank, replace=False)
 
             else:
                 if self.verbose: print("Choosing the active points via leverage scores")
                 leverage = self.leverage_scores(K)
-                inxs = choice(xrange(len(leverage)), size=self.rank, replace=False, p=leverage)
+                inxs = choice(range(len(leverage)), size=self.rank, replace=False, p=leverage)
 
         self.rank    = len(inxs)
         self.K       = K

@@ -6,7 +6,7 @@ Kernel alignment based on kernel Ridge regression. The kernels are not assumed t
     1. C. Cortes, L-2 Regularization for Learning Kernels. UAI (2009).
 
 """
-from align import Align
+from .align import Align
 from numpy import ones, zeros, eye, array, hstack, sqrt
 from numpy.linalg import inv, norm
 from ..util.la import woodbury_inverse
@@ -65,7 +65,7 @@ class L2KRR(Align):
         if holdout is not None:
             holdin = sorted(list(set(range(m)) - set(holdout)))
             y = y[holdin]
-            Ksa = list(map(lambda k: k[holdin, :][:, holdin], Ks))
+            Ksa = list([k[holdin, :][:, holdin] for k in Ks])
             en = enumerate(Ksa)
             m = Ksa[0].shape[0]
         else:
@@ -120,7 +120,7 @@ class L2KRRlowRank(L2KRR):
         if holdout is not None:
             holdin = sorted(list(set(range(m)) - set(holdout)))
             y = y[holdin]
-            Vs = list(map(lambda v: v[holdin, :], Vs))
+            Vs = list([v[holdin, :] for v in Vs])
             en = enumerate(Vs)
         else:
             Vs = Vs

@@ -44,7 +44,7 @@ class KMP:
 
         k = len(Ks)
         Acts = [list() for K in Ks]
-        Inas = [range(n) for K in Ks]
+        Inas = [list(range(n)) for K in Ks]
         P = []
 
         r = y.reshape((n, 1)) - np.mean(y)
